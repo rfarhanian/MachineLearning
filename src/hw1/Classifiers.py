@@ -108,5 +108,5 @@ class Classifiers:
             plt.ylabel('Frequency')
             plt.title(classifier_name)
             plt.subplots_adjust(left=0.15)
-            plt.savefig(('./result/' + classifier_name + ".png"))
             plt.show()
+            plt.savefig(('./result/' + classifier_name + ".png"))
