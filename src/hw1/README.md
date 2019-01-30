@@ -1,5 +1,3 @@
-# adapt this code below to run your analysis
-
 # Due before live class 2
 # 1. Write a function to take a list or dictionary of clfs and hypers ie use logistic regression, each with 3 different sets of hyper parrameters for each
 
