@@ -1,7 +1,7 @@
 from typing import Type
 
 from sklearn import datasets
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import KFold
@@ -37,9 +37,9 @@ def run(a_clf: Type, data, clf_hyper={}):
     return ret
 
 
-def run_all(cls, data):
+def run_all(classifiers, data):
     result = []
-    for classifier in cls:
+    for classifier in classifiers:
         classifier_name = classifier.get_name()
         classifier_type = classifier.get_classifier_type()
         response = run(classifier_type, data, classifier.get_hyper_parameter_attributes().get_attributes())
@@ -55,21 +55,18 @@ Classifiers.visualize_with_histogram(result)
 classifier_dictionary = {'RandomForestClassifier': RandomForestClassifier(),
                          'LogisticRegression': LogisticRegression(),
                          'MLPClassifier': MLPClassifier(),
-                         'GradientBoostingClassifier': GradientBoostingClassifier(),
                          'KNeighborsClassifier': KNeighborsClassifier(),
                          }
 
 hyperparameter_dictionary = {
-    'RandomForestClassifier': {"criterion": ['gini', 'entropy'], "splitter": ['random'],
-                               "max_depth": [1, 2], "min_samples_split": [4, 2]},
-
+    'RandomForestClassifier': {"min_samples_split": [2, 4], "n_jobs": [-1], "n_estimators": [10, 12, 15]},
     'LogisticRegression': {"tol": [0.0001], "C": [1, 3, 5], "penalty": ['l1', 'l2'], "dual": [False],
                            "fit_intercept": [True]},
-    'KNeighborsClassifier': {
-        "algorithm": ['auto', 'ball_tree', 'kd_tree'], "n_neighbors": [5, 6, 7],
-        "n_jobs": [-1],
-        "leaf_size": [25, 30, 40]}
+    'MLPClassifier': {"activation": ['logistic', 'tanh', 'relu'], "solver": ["lbfgs", "sgd"]},
+    'KNeighborsClassifier': {"algorithm": ['auto', 'kd_tree', 'ball_tree'], "n_neighbors": [5, 6, 7], "n_jobs": [-1],
+                             "leaf_size": [25, 30, 40]}
 }
 gridSearch = MyGridSearch(classifier_dictionary, hyperparameter_dictionary)
-gridSearch.fit(M, L, scoring='accuracy', n_jobs=2)
-gridSearch.score_summary(sort_by='max_score')
+gridSearch.fit(data[0], data[1], scoring='accuracy')
+summary = gridSearch.score_summary(sort_by='max_score')
+print(summary)

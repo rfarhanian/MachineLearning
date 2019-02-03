@@ -51,19 +51,19 @@ class Classifiers:
     # This method returns all possible classifiers with all combinations of hyperparameter sets.
     def all_classifiers(self):
         parameters = []
-        parameters += Classifiers.to_list(self.decisionTreeClassifier)
-        parameters += Classifiers.to_list(self.mlpClassifier)
-        parameters += Classifiers.to_list(self.perceptronClassifiers)
-        parameters += Classifiers.to_list(self.randomForestClassifiers)
-        parameters += Classifiers.to_list(self.logisticRegressionClassifiers)
-        parameters += Classifiers.to_list(self.gradientBoostingClassifiers)
-        parameters += Classifiers.to_list(self.k_neighborsClassifiers)
+        parameters += Classifiers.combinations(self.decisionTreeClassifier)
+        parameters += Classifiers.combinations(self.mlpClassifier)
+        parameters += Classifiers.combinations(self.perceptronClassifiers)
+        parameters += Classifiers.combinations(self.randomForestClassifiers)
+        parameters += Classifiers.combinations(self.logisticRegressionClassifiers)
+        parameters += Classifiers.combinations(self.gradientBoostingClassifiers)
+        parameters += Classifiers.combinations(self.k_neighborsClassifiers)
         return parameters
 
     # This method transforms a generic classifier object with possible combinations of hyper-parameter configuration
     # into a set of a classifiers.
     @classmethod
-    def to_list(cls, classifier: Classifier):
+    def combinations(cls, classifier: Classifier):
         result = []
         name = classifier.get_name()
         attributes = classifier.hyper_parameter_attributes.get_attributes()
@@ -85,8 +85,8 @@ class Classifiers:
         plt.xticks(rotation=25, horizontalalignment='right', fontsize=6)
         plt.ylabel('accuracy')
         fig.suptitle(title)
-        plt.show()
-        plt.savefig(('./result/' + plot_name))
+        plt.savefig('./result/' + plot_name)
+        fig.show()
 
     # This method visualizes the accuracy of the average of fold accuracy per classifier
     @classmethod
@@ -100,6 +100,7 @@ class Classifiers:
             report_dictionary[reportItem.get_classifier_name()].append(reportItem)
 
         for key, value in report_dictionary.items():
+            fig = plt.figure()
             classifier_name = key
             x = list(map(lambda x: x.get_accuracy(), value))
             num_bins = len(report)
@@ -109,4 +110,4 @@ class Classifiers:
             plt.title(classifier_name)
             plt.subplots_adjust(left=0.15)
             plt.show()
-            plt.savefig(('./result/' + classifier_name + ".png"))
+            fig.savefig(('./result/' + classifier_name + ".png"))

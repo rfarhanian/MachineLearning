@@ -8,18 +8,18 @@ class MyGridSearch:
     def __init__(self, models, params):
         if not set(models.keys()).issubset(set(params.keys())):
             missing_params = list(set(models.keys()) - set(params.keys()))
-            raise ValueError("Estimators missing parameters: %s" % missing_params)
+            raise ValueError("Estimators parameters are missing: %s" % missing_params)
         self.models = models
         self.params = params
         self.keys = models.keys()
         self.grid_searches = {}
 
-    def fit(self, X, y, cv=5, n_jobs=3, verbose=1, scoring=None, refit=False):
+    def fit(self, X, y, cv=5, verbose=1, scoring=None, refit=False):
         for key in self.keys:
             print("Running GridSearchCV for %s." % key)
             model = self.models[key]
             params = self.params[key]
-            gs = GridSearchCV(model, params, cv=cv, n_jobs=n_jobs,
+            gs = GridSearchCV(model, params, cv=cv, n_jobs=-1,
                               verbose=verbose, scoring=scoring, refit=refit,
                               return_train_score=True)
             gs.fit(X, y)
