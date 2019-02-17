@@ -1,6 +1,6 @@
 from typing import List
 
-import pandas
+import numpy as np
 
 
 class ClaimParser():
@@ -76,7 +76,8 @@ class ClaimParser():
             ('Agreement.ID', 'object')
         ]
         # print(pandas.read_csv(self.location, header=0).dtypes)
-        self.rows = pandas.np.genfromtxt(self.location, delimiter=',', skip_header=1, dtype=data_types)
+
+        self.rows = np.genfromtxt(self.location, delimiter=',', skip_header=1, dtype=data_types)
         self.columns2 = dict()
         self.columns2 = []
         self.line_count = len(self.rows)
