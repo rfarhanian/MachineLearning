@@ -8,9 +8,6 @@ by a claim line number ('Claim.Line.Number').
      B. How much was paid for J-codes to providers for 'in network' claims?
 
      C. What are the top five J-codes based on the payment to providers?
-
-
-
 2. For the following exercises, determine the number of providers that were paid for at least one J-code. Use the J-code claims for these providers to complete the following exercises.
 
     A. Create a scatter plot that displays the number of unpaid claims (lines where the ‘Provider.Payment.Amount’ field is equal to zero) for each provider versus the number of paid claims.
@@ -18,9 +15,6 @@ by a claim line number ('Claim.Line.Number').
     B. What insights can you suggest from the graph?
 
     C. Based on the graph, is the behavior of any of the providers concerning? Explain.
-
-
-
 3. Consider all claim lines with a J-code.
 
      A. What percentage of J-code claim lines were unpaid?
@@ -29,7 +23,7 @@ by a claim line number ('Claim.Line.Number').
 
      C. How accurate is your model at predicting unpaid claims?
 
-      D. What data attributes are predominately influencing the rate of non-payment?
+     D. What data attributes are predominately influencing the rate of non-payment?
       
       
-The result should be in a text file with outputs in it or it can be a 
+The result should be in a text file with outputs in it or it can be a `_**_**``**_**_`
