@@ -43,7 +43,7 @@ class ClaimParser:
         types = ['S8', 'f8', 'i4', 'i4', 'S14', 'S6', 'S6', 'S6', 'S4', 'S9', 'S7', 'f8', 'S5', 'S3', 'S3', 'S3', 'S3',
                  'S3', 'f8', 'f8', 'i4', 'i4', 'i4', 'S3', 'S3', 'S3', 'S4', 'S14', 'S14']
 
-        self.rows = np.genfromtxt(r'./input/claim.sample.csv', dtype=types, delimiter=',', names=True,
+        self.rows = np.genfromtxt('./input/claim.sample.csv', dtype=types, delimiter=',', names=True,
                                   usecols=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
                                            22, 23, 24, 25, 26, 27, 28])
         self.columns = self.rows.dtype.names
@@ -53,5 +53,11 @@ class ClaimParser:
     def get_rows(self):
         return self.rows
 
+    def get_columns(self):
+        return self.columns
+
     def get_row_line_count(self):
         return len(self.rows)
+
+    def get_row_dtypes(self):
+        return len(self.rows.dtype)
