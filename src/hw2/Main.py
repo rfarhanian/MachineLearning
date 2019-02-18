@@ -2,7 +2,4 @@ from hw2.ClaimParser import ClaimParser
 from hw2.One import One
 
 parser = ClaimParser("./input/claim.sample.csv")
-result = One.get_procedure_code(parser.get_rows())
-print(result)
-# print(parser.__str__())
-# print(parser.get_rows())
+print("One result:", One.count_column_values(parser.get_rows(), column_name='ProcedureCode', prefix='J'))

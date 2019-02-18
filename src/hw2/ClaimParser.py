@@ -1,9 +1,38 @@
+import functools
+import io
+import sys
 from typing import List
 
 import numpy as np
 
+genfromtxt_old = np.genfromtxt
 
-class ClaimParser():
+
+# Numpy cheetsheet
+# https://s3.amazonaws.com/assets.datacamp.com/blog_assets/Numpy_Python_Cheat_Sheet.pdf
+class ClaimParser:
+
+    @functools.wraps(genfromtxt_old)
+    def genfromtxt_py3_fixed(f, encoding="utf-8", *args, **kwargs):
+        if isinstance(f, io.TextIOBase):
+            if hasattr(f, "buffer") and hasattr(f.buffer, "raw") and \
+                    isinstance(f.buffer.raw, io.FileIO):
+                fb = f.buffer.raw
+                fb.seek(f.tell())
+                result = genfromtxt_old(fb, *args, **kwargs)
+                f.seek(fb.tell())
+            else:
+                old_cursor_pos = f.tell()
+                fb = io.BytesIO(bytes(f.read(), encoding=encoding))
+                result = genfromtxt_old(fb, *args, **kwargs)
+                f.seek(old_cursor_pos + fb.tell())
+        else:
+            result = genfromtxt_old(f, *args, **kwargs)
+        return result
+
+    if sys.version_info >= (3,):
+        np.genfromtxt = genfromtxt_py3_fixed
+
     columns: List[str]
 
     def __init__(self, location):
@@ -11,98 +40,18 @@ class ClaimParser():
         self.__parse__()
 
     def __parse__(self):
-        # line_count: int = 0
-        # self.my_data = pandas.read_csv(self.location, header=0)
-        # data_types = [
-        #     ('V1', 'int16'),
-        #     ('Claim.Number', 'float64'),
-        #     ('Claim.Line.Number', 'int64'),
-        #     ('Member.ID', 'int64'),
-        #     ('Provider.ID', '<u10'),
-        #     ('Line.Of.Business.ID', 'object'),
-        #     ('Revenue.Code', 'object'),
-        #     ('Service.Code', 'object'),
-        #     ('Place.Of.Service.Code', 'object'),
-        #     ('Procedure.Code', 'object'),
-        #     ('Diagnosis.Code', 'object'),
-        #     ('Claim.Charge.Amount', 'float64'),
-        #     ('Denial.Reason.Code', 'object'),
-        #     ('Price.Index', 'object'),
-        #     ('In.Out.Of.Network', 'object'),
-        #     ('Reference.Index', 'object'),
-        #     ('Pricing.Index', 'object'),
-        #     ('Capitation.Index', 'object'),
-        #     ('Subscriber.Payment.Amount', 'float64'),
-        #     ('Provider.Payment.Amount', 'float64'),
-        #     ('Group.Index', 'int64'),
-        #     ('Subscriber.Index', 'int64'),
-        #     ('Subgroup.Index', 'int64'),
-        #     ('Claim.Type', 'object'),
-        #     ('Claim.Subscriber.Type', 'object'),
-        #     ('Claim.Pre.Prince.Index', 'object'),
-        #     ('Claim.Current.Status', 'int64'),
-        #     ('Network.ID', 'object'),
-        #     ('Agreement.ID', 'object')
-        # ]
-        data_types = [
-            ('V1', 'int16'),
-            ('Claim.Number', 'float64'),
-            ('Claim.Line.Number', 'int64'),
-            ('Member.ID', 'int64'),
-            ('Provider.ID', 'str'),
-            ('Line.Of.Business.ID', 'str'),
-            ('Revenue.Code', 'object'),
-            ('Service.Code', 'object'),
-            ('Place.Of.Service.Code', 'object'),
-            ('Procedure.Code', 'str'),
-            ('Diagnosis.Code', 'object'),
-            ('Claim.Charge.Amount', 'float64'),
-            ('Denial.Reason.Code', 'object'),
-            ('Price.Index', 'object'),
-            ('In.Out.Of.Network', 'object'),
-            ('Reference.Index', 'object'),
-            ('Pricing.Index', 'object'),
-            ('Capitation.Index', 'object'),
-            ('Subscriber.Payment.Amount', 'float64'),
-            ('Provider.Payment.Amount', 'float64'),
-            ('Group.Index', 'int64'),
-            ('Subscriber.Index', 'int64'),
-            ('Subgroup.Index', 'int64'),
-            ('Claim.Type', 'object'),
-            ('Claim.Subscriber.Type', 'object'),
-            ('Claim.Pre.Prince.Index', 'object'),
-            ('Claim.Current.Status', 'int64'),
-            ('Network.ID', 'object'),
-            ('Agreement.ID', 'object')
-        ]
-        # print(pandas.read_csv(self.location, header=0).dtypes)
+        types = ['S8', 'f8', 'i4', 'i4', 'S14', 'S6', 'S6', 'S6', 'S4', 'S9', 'S7', 'f8', 'S5', 'S3', 'S3', 'S3', 'S3',
+                 'S3', 'f8', 'f8', 'i4', 'i4', 'i4', 'S3', 'S3', 'S3', 'S4', 'S14', 'S14']
 
-        self.rows = np.genfromtxt(self.location, delimiter=',', skip_header=1, dtype=data_types)
-        self.columns2 = dict()
-        self.columns2 = []
-        self.line_count = len(self.rows)
-
-        # with open(self.location) as csv_file:
-        #     self.csv_reader = csv.reader(csv_file, delimiter=',')
-        #     for row in self.csv_reader:
-        #         if line_count == 0:
-        #             count=0
-        #             for item in row:
-        #                 self.columns2[count]=item
-        #                 count=count+1
-        #         else:
-        #             self.rows.append(row)
-        #         line_count += 1
-        # self.line_count = line_count
+        self.rows = np.genfromtxt(r'./input/claim.sample.csv', dtype=types, delimiter=',', names=True,
+                                  usecols=[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+                                           22, 23, 24, 25, 26, 27, 28])
+        self.columns = self.rows.dtype.names
+        print(self.columns)
+        print(self.rows.dtype)
 
     def get_rows(self):
         return self.rows
 
-    def get_columns(self):
-        return self.columns2
-
     def get_row_line_count(self):
-        return self.line_count
-
-    def __str__(self) -> str:
-        return 'line count:', self.get_row_line_count(), ', columns:', self.get_columns()
+        return len(self.rows)
