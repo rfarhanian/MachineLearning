@@ -4,3 +4,4 @@ from hw2.One import One
 parser = ClaimParser("./input/claim.sample.csv")
 print("One A result:", One.count_column_values(parser.get_rows(), column_name='ProcedureCode', prefix='J'))
 print("One B result:", One.in_network_price_paid(parser.get_rows()))
+print("One C result:", One.top_five_jay_code_based_on_providers(parser.get_rows()))

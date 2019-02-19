@@ -18,3 +18,12 @@ class One:
         in_network_indices = with_jay_procedure_code[
             np.where(with_jay_procedure_code['InOutOfNetwork'] == '\"I\"'.encode())]
         return in_network_indices['ClaimChargeAmount'].sum()
+
+    # What are the top five J-codes based on the payment to providers?
+    @classmethod
+    def top_five_jay_code_based_on_providers(cls, data):
+        with_jay_procedure_code = data[np.where((np.core.defchararray.find(data['ProcedureCode'], 'J'.encode()) == 1))]
+        sorted = np.sort(with_jay_procedure_code, order='ProviderPaymentAmount')
+        print(sorted)
+        topFive = sorted[:5]
+        return topFive['ProcedureCode']
