@@ -109,3 +109,6 @@ class Two:
         print('correlated with extra or unsupported services. Fraud or quality of ')
         print('service cannot be directly correlated with rejected claims unless more information')
         print('about the location, patients, and rules are revealed.')
+
+    def finalize(self):
+        self.pdf.close()
