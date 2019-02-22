@@ -1,14 +1,15 @@
+
 class JayStartingClaimsContext:
-    def __init__(self, jay_starting_claims, data):
-        self.jay_starting_claims = jay_starting_claims
-        self.jay_starting_codes = data[jay_starting_claims]
-        self.size = len(jay_starting_claims)
+    def __init__(self, claims, data):
+        self.claims = claims
+        self.codes = data[claims]
+        self.size = len(claims)
 
-    def get_jay_starting_claims(self):
-        return self.jay_starting_claims
+    def get_claims(self):
+        return self.claims
 
-    def get_jay_starting_codes(self):
-        return self.jay_starting_codes
+    def get_codes(self):
+        return self.codes
 
     def get_size(self):
         return self.size
