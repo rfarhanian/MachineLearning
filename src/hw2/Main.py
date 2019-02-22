@@ -10,7 +10,7 @@ print("One B result:", One.in_network_price_paid(parser.get_rows()))
 provider_sorted_jay_codes = One.top_jay_code_based_on_providers(jay_starting_claims_context)
 print("One C result:", provider_sorted_jay_codes.get_top_procedure_codes(5))
 
-two = Two('./output/', 'HW2-Result')
+two = Two('./result/', 'HW2-Result')
 two.a(parser.get_rows(), jay_starting_claims_context.get_codes())
 two.b()
 two.c()
