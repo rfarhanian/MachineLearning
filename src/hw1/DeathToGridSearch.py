@@ -42,8 +42,9 @@ def run_all(classifiers, data):
     for classifier in classifiers:
         classifier_name = classifier.get_name()
         classifier_type = classifier.get_classifier_type()
-        response = run(classifier_type, data, classifier.get_hyper_parameter_attributes().get_attributes())
-        result.append(ClassificationOutput(classifier_name, classifier.get_title(), response))
+        attributes = classifier.get_hyper_parameter_attributes().get_attributes()
+        response = run(classifier_type, data, attributes)
+        result.append(ClassificationOutput(classifier_name, classifier.get_title(), response, attributes))
     return result
 
 
