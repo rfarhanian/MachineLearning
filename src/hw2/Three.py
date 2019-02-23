@@ -1,5 +1,8 @@
+from operator import attrgetter
+
 import numpy as np
 from sklearn import preprocessing
+from sklearn.ensemble import RandomForestClassifier
 
 from hw2.domain.ProviderSortedJayCodes import ProviderSortedJayCodes
 from hw2.util.ClassifiersExecutor import ClassifiersExecutor
@@ -106,27 +109,15 @@ class Three:
         self.all_claims_w_L.dtype.names
 
         label = 'IsUnpaid'
-        # I just removed columns that are unique or have too many missing values or redundant in our model
-        # Also by running a Random Forest Feature Importance selection, I found columns have the lowest importance
-        # and filtered them out.
-        numeric_features = ['ClaimNumber', 'ClaimLineNumber', 'ClaimChargeAmount', 'SubscriberIndex', 'SubgroupIndex', ]
+        numeric_features = ['ClaimNumber', 'ClaimLineNumber', 'ClaimChargeAmount']
 
-        categoricals = [
-            'ProviderID', 'LineOfBusinessID',  # 'RevenueCode',
-            'ServiceCode',  # 'PlaceOfServiceCode', 'ProcedureCode', 'DiagnosisCode',  # 'DenialReasonCode',
-            # 'PriceIndex', 'InOutOfNetwork', 'ReferenceIndex',
-            'PricingIndex', 'CapitationIndex', 'ClaimSubscriberType',
-            # 'ClaimPrePrinceIndex', 'ClaimCurrentStatus',
-            'NetworkID',
-            'AgreementID', 'ClaimType']
+        categoricals = ['RevenueCode', 'PriceIndex', 'InOutOfNetwork',
+                        'NetworkID', 'ClaimType']
 
-
-        # separate categorical and numeric features
         categorical_features = np.array(
             self.all_claims_w_L[categoricals].tolist())  # convert features to list, then to np.array
         numerical_features = np.array(
             self.all_claims_w_L[numeric_features].tolist())  # convert features to list, then to np.array
-        L = np.array(self.all_claims_w_L[label].tolist())
 
         label_encoder = preprocessing.LabelEncoder()
         for i in range(len(categoricals)):
@@ -142,6 +133,44 @@ class Three:
         np.corrcoef(M)
         self.data = (M, L, 5)
 
-    def b(self):
+    def b_and_c(self):
+        # 3B. Create a model to predict when a J-code is unpaid. Explain why you choose the modeling approach.
+        # 3C. How accurate is your model at predicting unpaid claims? this method generates a png file in the result folder
         executor = ClassifiersExecutor()
-        executor.execute(self.data)
+        classification_output = executor.execute(self.data)
+        print('Algorithms with different hyper parameters and the accuracy result:')
+        for output_item in classification_output:
+            print(output_item.description())
+        model_with_highest_accuracy = max(classification_output, key=attrgetter('accuracy'))
+        print('3B and C. The classification Result stemmed from reusing homework 1 classifiers illustrates '
+              'that KNN predicts unpaid claims better than Random Forest and other classifiers: ')
+        print(model_with_highest_accuracy.description())
+        return classification_output
+
+    def d(self):
+        # What data attributes are predominately influencing the rate of non-payment?
+        column_names = ['ClaimNumber', 'ClaimLineNumber', 'MemberID',
+                        'ClaimChargeAmount', 'SubscriberPaymentAmount', 'ProviderPaymentAmount',
+                        'GroupIndex', 'SubscriberIndex', 'SubgroupIndex', 'V1', 'ProviderID', 'LineOfBusinessID',
+                        'RevenueCode', 'ServiceCode', 'PlaceOfServiceCode', 'ProcedureCode', 'DiagnosisCode',
+                        'DenialReasonCode', 'PriceIndex', 'InOutOfNetwork', 'ReferenceIndex', 'PricingIndex',
+                        'CapitationIndex', 'ClaimSubscriberType', 'ClaimPrePrinceIndex', 'ClaimCurrentStatus',
+                        'NetworkID', 'AgreementID', 'ClaimType'
+                        ]
+
+        M, L, n_folds = self.data
+        classifier = RandomForestClassifier(n_estimators='warn', criterion='gini', min_samples_split=6,
+                                            max_features='auto', n_jobs=-1)
+        classifier.fit(M, L)
+        feature_importance_map = zip(column_names, classifier.feature_importances_)
+        print('3.D I am using Random Forest Classifer to answer 3d. It is the second best algorithm among all my '
+              'classifiers. The model suggests that PriceIndex, ClaimType, RevenueCode, InOutOfNetwork, '
+              'NetworkId, ClaimChargeAmount have the highest influence. Considering that our model'
+              ' is learning based on Jcodes, we should avoid over fitting by not adding too many variables '
+              'into the model. We should also be very cautious about sequential identifiers and redundant features '
+              '(e.g. DenialReasonCode and perhaps ProcedureCode) as model with limited data might suggest influence'
+              ' while in reality the correlation might not make any sense.')
+
+        for item in feature_importance_map:
+            print(item)
+        return feature_importance_map

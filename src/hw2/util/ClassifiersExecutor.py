@@ -13,6 +13,7 @@ class ClassifiersExecutor:
         classifiers = Classifiers()
         result = self.__run_all__(classifiers.all_classifiers(), data)
         Classifiers.visualize(result, 'Accuracy Of Classifiers', 'classificationResult.png')
+        return result
 
     def __run__(a_clf: Type, data, clf_hyper={}):
         M, L, n_folds = data  # unpack data container
@@ -39,7 +40,7 @@ class ClassifiersExecutor:
         for classifier in classifiers:
             classifier_name = classifier.get_name()
             classifier_type = classifier.get_classifier_type()
-            response = ClassifiersExecutor.__run__(classifier_type, data,
-                                                   classifier.get_hyper_parameter_attributes().get_attributes())
-            result.append(ClassificationOutput(classifier_name, classifier.get_title(), response))
+            hyper_param_set = classifier.get_hyper_parameter_attributes().get_attributes()
+            response = ClassifiersExecutor.__run__(classifier_type, data, hyper_param_set)
+            result.append(ClassificationOutput(classifier_name, classifier.get_title(), response, hyper_param_set))
         return result
