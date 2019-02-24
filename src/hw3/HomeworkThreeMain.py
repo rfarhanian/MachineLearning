@@ -2,7 +2,7 @@ from hw3.DataParser import DataParser
 from hw3.datavisualizer import DataVisualizer
 
 
-class Main:
+class HomeworkThreeMain:
     @classmethod
     def start(cls):
         parser = DataParser()
@@ -11,4 +11,4 @@ class Main:
                              restaurants=parser.get_restaurant())
 
 
-Main.start()
+HomeworkThreeMain.start()
