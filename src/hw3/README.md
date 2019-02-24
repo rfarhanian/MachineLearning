@@ -35,8 +35,8 @@ resturants  = {'flacos':{'distance': 2,
 
 # Transform the restaurant data into a matrix(M_resturants) use the same column index.
 
-# The most imporant idea in this project is the idea of a linear combination.
-# Informally describe what a linear combination is  and how it will relate to our resturant matrix.
+# The most important idea in this project is the idea of a linear combination.
+# Informally describe what a linear combination is and how it will relate to our restaurant matrix.
 
 # Choose a person and compute(using a linear combination) the top restaurant for them.  What does each entry in the resulting vector represent.
 
