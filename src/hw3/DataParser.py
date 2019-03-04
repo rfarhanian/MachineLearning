@@ -129,7 +129,7 @@ class DataParser:
         print(peopleValues)
         peopleMatrix = np.array(peopleValues)
         peopleMatrix.shape
-        return People(peopleMatrix, peopleKeys, peopleValues)
+        return People(peopleMatrix, peopleKeys, peopleValues, list(people.keys()))
 
     def init_restaurant_matrix(self):
         # Next you collected data from an internet website. You got the following information.
@@ -253,7 +253,7 @@ class DataParser:
         restaurantsMatrix
 
         restaurantsMatrix.shape
-        return Restaurant(restaurantsMatrix, restaurantsKeys, restaurantsValues)
+        return Restaurant(restaurantsMatrix, restaurantsKeys, restaurantsValues, list(restaurants.keys()))
 
     def get_people(self):
         return self.people

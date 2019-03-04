@@ -7,7 +7,7 @@ class HomeworkThreeMain:
     @classmethod
     def start(cls):
         parser = DataParser()
-        result = VoteProcessor.process(parser.get_restaurant(), parser.get_restaurant())
+        result = VoteProcessor.process(parser.get_restaurant(), parser.get_people())
         visualizer = DataVisualizer()
         visualizer.visualize(result, parser.get_people(), parser.get_restaurant())
 

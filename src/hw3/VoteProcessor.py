@@ -45,8 +45,18 @@ class VoteProcessor:
         # This is for you to answer! However....https://en.wikipedia.org/wiki/Linear_combination
         # essentially you are multiplying each term by a constant and summing the results.
 
-        # Choose a person and compute(using a linear combination) the top restaurant for them.
         # What does each entry in the resulting vector represent?
+        print(
+            'Each entry represents an individuals vote for a specific restaurant. Each column contains a specific individuals vote of all restaurants.')
+        print('If we transpose the result matrix, every row will represent individuals votes to all restaurants')
+        M_usr_x_rest = result.T
+        print('I call it M_usr_x_rest, every row will represent individuals votes to all restaurants')
+        tom_votes = M_usr_x_rest[9]
+        # Choose a person and compute(using a linear combination) the top restaurant for them.
+        print('For example, Tom\'s votes for all restaurants are: ' + str(tom_votes))
+        toms_highest_vote = tom_votes.argmax()
+
+        print('His highest vote was for ' + str(people.get_names()[toms_highest_vote]) + '\'s restaurant ')
 
         print(people.get_keys())
         print(people.get_values())
@@ -57,7 +67,7 @@ class VoteProcessor:
         restaurants_matrix.shape, people_matrix.shape
 
         # We need to swap axis on people_matrix
-        # newPeopleMatrix = np.swapaxes(people_matrix, 1, 0)
+        newPeopleMatrix = np.swapaxes(people_matrix, 1, 0)
 
         # https://docs.scipy.org/doc/numpy/reference/generated/numpy.swapaxes.html
         newPeopleMatrix = np.swapaxes(people_matrix, 0, 1)
@@ -65,7 +75,7 @@ class VoteProcessor:
         newPeopleMatrix.shape, restaurants_matrix.shape
         restaurants_matrix.shape, newPeopleMatrix.shape
 
-        # Next compute a new matrix (M_usr_x_rest  i.e. an user by restaurant) from all people.  What does the a_ij matrix represent?
+        # Next compute a new matrix (M_usr_x_rest  i.e. a user by restaurant) from all people.  What does the a_ij matrix represent? answered above
         # Let's check our answers
 
         results = np.matmul(restaurants_matrix, newPeopleMatrix)
