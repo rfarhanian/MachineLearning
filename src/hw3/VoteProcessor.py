@@ -67,7 +67,7 @@ class VoteProcessor:
         restaurants_matrix.shape, people_matrix.shape
 
         # We need to swap axis on people_matrix
-        newPeopleMatrix = np.swapaxes(people_matrix, 1, 0)
+        # newPeopleMatrix = np.swapaxes(people_matrix, 1, 0)
 
         # https://docs.scipy.org/doc/numpy/reference/generated/numpy.swapaxes.html
         newPeopleMatrix = np.swapaxes(people_matrix, 0, 1)
@@ -97,6 +97,8 @@ class VoteProcessor:
         # reference: https://docs.scipy.org/doc/numpy/reference/generated/numpy.argsort.html
         # Argsort returns the indices that would sort an array - https://stackoverflow.com/questions/17901218/numpy-argsort-what-is-it-doing
         # By default, argsort is in ascending order, but below, we make it in descending order and then add 1 since ranks start at 1
+        sortedM_usr_x_rest = M_usr_x_rest.argsort()[::-1] + 1
+        sortedM_usr_x_rest
         sortedResults = results.argsort()[::-1] + 1
         sortedResults
 
@@ -104,3 +106,4 @@ class VoteProcessor:
 
         results.shape
         return results
+
