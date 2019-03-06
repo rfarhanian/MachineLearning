@@ -119,6 +119,21 @@ class VoteProcessor:
         M_usr_x_rest_rank = np.argsort(np.argsort(M_usr_x_rest, axis=0), axis=0)
         M_usr_x_rest_rank
 
+        print('------------------------People with restaurant rank-------------------------')
+        names = people.get_names()
+        offset = '\t\t\t'
+        print(offset, 'name', offset, 'score', '\t\t', 'rank')
+
+        for i in range(0, 10):
+            print(names[i])
+            ith_rest_rank = M_usr_x_rest_rank.T[0:10][i]
+            ith_rest_score = M_usr_x_rest.T[0:10][i]
+            r = restaurant.get_names()
+            for j in range(0, 10):
+                print(offset, r[j], '\t\t\t', ith_rest_score[j], '\t\t', ith_rest_rank[j])
+
+        print('----------------------------------------------------------------------')
+
         M_rest_x_usr_rank = np.argsort(np.argsort(sum, axis=0), axis=0)[::-1] + 1
 
         results.shape
