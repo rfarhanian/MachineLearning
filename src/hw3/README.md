@@ -40,7 +40,7 @@ resturants  = {'flacos':{'distance': 2,
 
 # Choose a person and compute(using a linear combination) the top restaurant for them.  What does each entry in the resulting vector represent.
 
-# Next compute a new matrix (M_usr_x_rest  i.e. an user by restaurant) from all people.  What does the a_ij matrix represent?
+# Next compute a new matrix (M_usr_x_rest  i.e. a user by restaurant) from all people.  What does the a_ij matrix represent?
 
 # Sum all columns in M_usr_x_rest to get optimal restaurant for all users.  What do the entry’s represent?
 
@@ -48,7 +48,7 @@ resturants  = {'flacos':{'distance': 2,
 
 -------- Discuss with class mates ---------
 
-# Now convert each row in the M_usr_x_rest into a ranking for each user and call it M_usr_x_rest_rank.   Do the same as above to generate the optimal resturant choice.
+# Now convert each row in the M_usr_x_rest into a ranking for each user and call it M_usr_x_rest_rank. Do the same as above to generate the optimal restaurant choice.
 Jack scores for 
                     scores        ranking 
 Tacos             74            1    
@@ -63,7 +63,7 @@ bar                  70             2
 
 # Find  user profiles that are problematic, explain why?
 
-# Think of two metrics to compute the disatistifaction with the group.
+# Think of two metrics to compute the dissatisfaction with the group.
 
 # Should you split in two groups today?
 

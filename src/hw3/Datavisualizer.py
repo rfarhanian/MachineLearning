@@ -112,8 +112,6 @@ class DataVisualizer:
         # y=0 (flacos), y=1 (Joes), y=2 (Poke), y=3 (Sush-shi), y=4 (Chick Fillet),
         # y=5 (Mackie Des), y=6 (Michaels), y=7 (Amaze), y=8 (Kappa), y=9 (Mu)
 
-        # labelList = ['Flacos', 'Joes', 'Poke', 'Sush-shi', 'Chick Fillet', 'Mackie Des', 'Michaels', 'Amaze', 'Kappa', 'Mu']
-
         fig = plt.figure(figsize=(30, 15))
         ax = fig.add_subplot(1, 1, 1)
         dendrogram(linked,
