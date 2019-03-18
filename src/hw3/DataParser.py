@@ -23,31 +23,31 @@ class DataParser:
     def init_people_matrix(self):
         print(np.array([np.random.dirichlet(np.ones(4), size=1)]))
         people = {
-            'Jane': {'willingness to travel': 0.1596993,
+            'Jane': {'willingness to travel': 0.3796993,
                      'desire for new experience': 0.67131344,
-                     'cost': 0.15006726,
+                     'cost': 0.34006726,
                      # 'indian food':1,
                      # 'Mexican food':1,
                      # 'hipster points':3,
-                     'vegetarian': 0.01892,
+                     'vegetarian': 0.31892,
                      },
-            'Bob': {'willingness to travel': 0.63124581,
-                    'desire for new experience': 0.20269888,
-                    'cost': 0.01354308,
+            'Bob': {'willingness to travel': 0.0731,
+                    'desire for new experience': 0.302,
+                    'cost': 0.2,
                     # 'indian food':1,
                     # 'Mexican food':1,
                     # 'hipster points':3,
-                    'vegetarian': 0.15251223,
+                    'vegetarian': 0.45251223,
                     },
-            'Mary': {'willingness to travel': 0.49337138,
-                     'desire for new experience': 0.41879654,
+            'Mary': {'willingness to travel': 0.38938,
+                     'desire for new experience': 0.027,
                      'cost': 0.05525843,
                      # 'indian food':1,
                      # 'Mexican food':1,
                      # 'hipster points':3,
                      'vegetarian': 0.03257365,
                      },
-            'Mike': {'willingness to travel': 0.08936756,
+            'Mike': {'willingness to travel': 0.2936756,
                      'desire for new experience': 0.14813813,
                      'cost': 0.43602425,
                      # 'indian food':1,
@@ -79,15 +79,15 @@ class DataParser:
                      # 'hipster points':3,
                      'vegetarian': 0.17188723,
                      },
-            'Moe': {'willingness to travel': 0.05101531,
-                    'desire for new experience': 0.03976796,
+            'Moe': {'willingness to travel': 0.07,
+                    'desire for new experience': 0.09,
                     'cost': 0.06372092,
                     # 'indian food':1,
                     # 'Mexican food':1,
                     # 'hipster points':3,
                     'vegetarian': 0.84549581,
                     },
-            'Sara': {'willingness to travel': 0.18780828,
+            'Sara': {'willingness to travel': 0.38780828,
                      'desire for new experience': 0.59094026,
                      'cost': 0.08490399,
                      # 'indian food':1,
@@ -95,9 +95,9 @@ class DataParser:
                      # 'hipster points':3,
                      'vegetarian': 0.13634747,
                      },
-            'Tom': {'willingness to travel': 0.77606127,
+            'Tom': {'willingness to travel': 0.08,
                     'desire for new experience': 0.06586204,
-                    'cost': 0.14484121,
+                    'cost': 0.84484121,
                     # 'indian food':1,
                     # 'Mexican food':1,
                     # 'hipster points':3,
@@ -144,26 +144,20 @@ class DataParser:
                     'distance': 2,
                     'novelty': 3,
                     'cost': 4,
-                    # 'average rating': 5,
-                    # 'cuisine': 5,
-                    'vegetarian': 5
+                    'vegetarian': 4
                 },
             'Joes':
                 {
                     'distance': 5,
                     'novelty': 1,
                     'cost': 5,
-                    # 'average rating': 5,
-                    # 'cuisine': 5,
-                    'vegetarian': 3
+                    'vegetarian': 5
                 },
             'Poke':
                 {
                     'distance': 4,
                     'novelty': 2,
-                    'cost': 4,
-                    # 'average rating': 5,
-                    # 'cuisine': 5,
+                    'cost': 2,
                     'vegetarian': 4
                 },
             'Sush-shi':
@@ -171,17 +165,13 @@ class DataParser:
                     'distance': 4,
                     'novelty': 3,
                     'cost': 4,
-                    # 'average rating': 5,
-                    # 'cuisine': 5,
                     'vegetarian': 4
                 },
             'Chick Fillet':
                 {
-                    'distance': 3,
+                    'distance': 2,
                     'novelty': 2,
                     'cost': 5,
-                    # 'average rating': 5,
-                    # 'cuisine': 5,
                     'vegetarian': 5
                 },
             'Mackie Des':
@@ -189,44 +179,34 @@ class DataParser:
                     'distance': 2,
                     'novelty': 3,
                     'cost': 4,
-                    # 'average rating': 5,
-                    # 'cuisine': 5,
-                    'vegetarian': 3
+                    'vegetarian': 1
                 },
             'Michaels':
                 {
-                    'distance': 2,
+                    'distance': 3,
                     'novelty': 1,
-                    'cost': 1,
-                    # 'average rating': 5,
-                    # 'cuisine': 5,
+                    'cost': 3,
                     'vegetarian': 5
                 },
             'Amaze':
                 {
                     'distance': 3,
-                    'novelty': 5,
+                    'novelty': 4,
                     'cost': 2,
-                    # 'average rating': 5,
-                    # 'cuisine': 5,
-                    'vegetarian': 4
+                    'vegetarian': 1
                 },
             'Kappa':
                 {
                     'distance': 5,
-                    'novelty': 1,
+                    'novelty': 2,
                     'cost': 2,
-                    # 'average rating': 5,
-                    # 'cuisine': 5,
                     'vegetarian': 3
                 },
             'Mu':
                 {
                     'distance': 3,
                     'novelty': 1,
-                    'cost': 5,
-                    # 'average rating': 5,
-                    # 'cuisine': 5,
+                    'cost': 4,
                     'vegetarian': 3
                 }
         }

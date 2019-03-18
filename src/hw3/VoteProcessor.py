@@ -39,7 +39,7 @@ class VoteProcessor:
         print(
             'The multiplication will yield a 10*10 matrix. Every column in the result matrix(M_usr_x_rest) represent the votes of one user.')
         print(
-            'Every row in the result matrix(M_usr_x_rest) represent the votes of all users to one specific restaurant.')
+            'Every row in the result matrix(M_usr_x_rest) represents the votes of all users to one specific restaurant.')
         print('(e.g Jane votes to all restaurants are in the first column)')
 
         # print('Toms Mu Vote is : (0.77606127 * 3) + (0.6586204 * 1) + (0.14484121 * 5) +(0.1323548 * 3): 4.10807466')
@@ -87,17 +87,15 @@ class VoteProcessor:
 
         # Sum all columns in M_usr_x_rest to get optimal restaurant for all users.  What do the entry’s represent?
         # I believe that this is what John and  is asking for, sum by columns
+        np.seterr(over='raise')
         np.sum(results, axis=1)
 
-        sum = np.sum(M_usr_x_rest, axis=1)
+        sum = np.sum(M_usr_x_rest, axis=1, dtype=np.float_)
         print(
             'sum represents the sum of all the votes of all individuals to all restaurants. This array can be used to rank the restaurants based on popularity')
-        # @todo: delete row: 3.0280796+ 2.27690624+2.65737312+3.32868665+2.66666108+2.99036796+1.2353793+ 4.21147962+4.21147962+1.82670446+1.95750764 = 26.17992734
-        # @todo: delete col: 3.0280796 + 2.68732173+2.6270343499999997+ 3.9995968100000003+ 3.41247949 + 3.8384571999999997+ 3.79620404+ 4.70369722999999995+ 3.16979065+ 2.39525089=33.65804
 
         # Now convert each row in the M_usr_x_rest into a ranking for each user and call it M_usr_x_rest_rank.
         # Do the same as above to generate the optimal restaurant choice.
-
 
         # Say that rank 1 is best
 
@@ -116,34 +114,72 @@ class VoteProcessor:
         print('The axis 0 should be considered so that the votes of people are ranked per restaurant.')
 
         # Now convert each row in the M_usr_x_rest into a ranking for each user and call it M_usr_x_rest_rank.   Do the same as above to generate the optimal restaurant choice.
-        M_usr_x_rest_rank = np.argsort(np.argsort(M_usr_x_rest, axis=0), axis=0)
+        M_usr_x_rest_rank = np.argsort(np.argsort(M_usr_x_rest, axis=0)[::-1], axis=0) + 1
         M_usr_x_rest_rank
 
         print('------------------------People with restaurant rank-------------------------')
         names = people.get_names()
         offset = '\t\t\t'
-        print(offset, 'name', offset, 'score', '\t\t', 'rank')
+        print('person', '\t\t', 'name', offset, 'score', offset, 'rank')
 
+        transposed_rank = M_usr_x_rest_rank.T
+        transposed_user_x_rest = M_usr_x_rest.T
         for i in range(0, 10):
             print(names[i])
-            ith_rest_rank = M_usr_x_rest_rank.T[0:10][i]
-            ith_rest_score = M_usr_x_rest.T[0:10][i]
+            ith_rest_rank = transposed_rank[0:10][i]
+            ith_rest_score = transposed_user_x_rest[0:10][i]
             r = restaurant.get_names()
             for j in range(0, 10):
                 print(offset, r[j], '\t\t\t', ith_rest_score[j], '\t\t', ith_rest_rank[j])
 
         print('----------------------------------------------------------------------')
 
-        M_rest_x_usr_rank = np.argsort(np.argsort(sum, axis=0), axis=0)[::-1] + 1
+        print('------------------------Restaurants ranked by people-------------------------')
+        offset = '\t\t\t'
+        print('restaurant', '\t', 'name', offset, 'score', offset, 'rank')
+        names = restaurant.get_names()
+        for i in range(0, 10):
+            print(names[i])
+            ith_user_rank = M_usr_x_rest_rank[i]
+            ith_rest_score = M_usr_x_rest[i]
+            p = people.get_names()
+            for j in range(0, 10):
+                print(offset, p[j], '\t\t\t', ith_rest_score[j], '\t\t', ith_user_rank[j])
+        print('----------------------------------------------------------------------')
 
-        results.shape
+        VoteProcessor.best_restaurant_by_user_vote(restaurant, sum)
+        VoteProcessor.best_restaurant_by_user_rank(restaurant, np.sum(M_usr_x_rest_rank, axis=1, dtype=np.float_))
+
+        print(
+            'Q. Why is there a difference between the two?  What problem arrives?  What does represent in the real world?')
+        print('The ranking based on sum of score and sum of ranks does not return the same result.')
+        print('It indicates that ranking votes are relative and does not reflect the popular vote.')
+        print('Q. How should you preprocess your data to remove this problem?')
+        print(
+            'A. sum of rank ignores the individual vote. Perhaps if I preprocess the data in a way that considers the individual vote, both computations yield the same result.')
+        return M_usr_x_rest_rank
+
+    @classmethod
+    def best_restaurant_by_user_vote(cls, restaurant, data):
+        M_rest_x_usr_rank = np.argsort(np.argsort(data, axis=0), axis=0)[::-1] + 1
         print('The computed sum can help us display the best restaurants in order based on people\'s vote')
         print('M_rest_x_usr_rank ranks restaurants according to popularity. The best restaurant is ranked as 1')
-        print('------------------------Restaurants with rank-------------------------')
+        print('------------------------Best Restaurants-------------------------')
         names = restaurant.get_names()
-        print('name', '\t\t\t', 'score', '\t\t', 'rank')
+        print('name', '\t\t\t', 'score', '\t\t\t', 'rank')
         for i in range(0, 10):
-            ith_rest_rank = M_rest_x_usr_rank[i]
-            print(names[i], '\t\t\t', sum[i], '\t\t', ith_rest_rank)
+            ith_user_rank = M_rest_x_usr_rank[i]
+            print(names[i], '\t\t\t', data[i], '\t\t', ith_user_rank)
         print('----------------------------------------------------------------------')
-        return M_usr_x_rest_rank
+
+    @classmethod
+    def best_restaurant_by_user_rank(cls, restaurant, data):
+        M_rest_x_usr_rank = np.argsort(np.argsort(data, axis=0), axis=0)[::-1] + 1
+        print('The ranking according to sum of ranks:')
+        print('------------------------Best Restaurants-------------------------')
+        names = restaurant.get_names()
+        print('name', '\t\t\t', 'score', '\t\t\t', 'rank')
+        for i in range(0, 10):
+            ith_user_rank = M_rest_x_usr_rank[i]
+            print(names[i], '\t\t\t', data[i], '\t\t', ith_user_rank)
+        print('----------------------------------------------------------------------')

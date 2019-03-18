@@ -3,11 +3,23 @@ import seaborn as sns
 from scipy.cluster.hierarchy import dendrogram, linkage
 from sklearn.cluster import KMeans
 
+from hw3.domain.PcaContext import PcaContext
 from hw3.domain.People import People
 from hw3.domain.Restaurant import Restaurant
 
 
 class DataVisualizer:
+
+    @classmethod
+    def plot_elbow(cls, pca_context: PcaContext, title: str):
+        plot_dims = (10, 8)
+        fig, ax = plt.subplots(figsize=plot_dims)
+
+        plt.plot(pca_context.get_explained_variance_ratio())
+        plt.xlabel('number of components')
+        plt.ylabel('cumulative explained variance')
+        plt.title(title)
+        plt.show()
 
     @classmethod
     def draw_vector(cls, v0, v1, ax=None):
@@ -31,7 +43,7 @@ class DataVisualizer:
         # https://jakevdp.github.io/PythonDataScienceHandbook/05.09-principal-component-analysis.html
         # plot principal components
 
-        fig, ax = plt.subplots(1, 1, figsize=(12, 12))
+        fig, ax = plt.subplots(1, 1, figsize=(4, 4))
         fig.subplots_adjust(left=0.0625, right=0.95, wspace=0.1)
 
         ax.scatter(matrix[:, 0], matrix[:, 1], alpha=0.2)
