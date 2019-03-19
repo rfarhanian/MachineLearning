@@ -33,7 +33,7 @@ class DataVisualizer:
         ax.annotate('', v1, v0, arrowprops=arrowprops)
 
     @classmethod
-    def visualize_silhouette(cls, reduced, labels):
+    def visualize_silhouette(cls, reduced, labels, title: str):
         # Silhouette Analysis with Kmeans Clustering on the PCA transformed data Matrix
         range_n_clusters = [2, 3, 4, 5, 6]
 
@@ -130,9 +130,9 @@ class DataVisualizer:
             ax2.set_xlabel("Feature space for the 1st feature", fontsize=20)
             ax2.set_ylabel("Feature space for the 2nd feature", fontsize=20)
 
-            plt.suptitle(("Silhouette analysis for KMeans clustering on sample data "
-                          "with n_clusters = %d" % n_clusters),
-                         fontsize=25, fontweight='bold')
+            suptitle = "Silhouette analysis for KMeans clustering on " + title + " sample data with n_clusters " + str(
+                n_clusters)
+            plt.suptitle((suptitle), fontsize=25, fontweight='bold')
 
             ax2.xaxis.set_tick_params(labelsize=20)
             ax2.yaxis.set_tick_params(labelsize=20)

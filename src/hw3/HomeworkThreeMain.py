@@ -30,7 +30,8 @@ class HomeworkThreeMain:
         print(
             'Considering that Calinski Harabaz and Davies Bouldin scores suggest that people should go to restaurants in 6 groups, I think 6 is the right answer.')
 
-        DataVisualizer.visualize_silhouette(restaurant_pca_context.get_reduced(), restaurants.get_names())
+        DataVisualizer.visualize_silhouette(restaurant_pca_context.get_reduced(), restaurants.get_names(), 'restaurant')
+        DataVisualizer.visualize_silhouette(people_pca_context.get_reduced(), people.get_names(), 'people')
         # DataVisualizer.visualize_hierarchical_cluster(people_pca_context.get_reduced(), people.get_names())
         # DataVisualizer.visualize_hierarchical_cluster(restaurant_pca_context.get_reduced(), restaurants.get_names())
 
