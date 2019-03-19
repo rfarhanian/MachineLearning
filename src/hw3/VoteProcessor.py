@@ -147,8 +147,10 @@ class VoteProcessor:
                 print(offset, p[j], '\t\t\t', ith_rest_score[j], '\t\t', ith_user_rank[j])
         print('----------------------------------------------------------------------')
 
-        VoteProcessor.best_restaurant_by_user_vote(restaurant, sum)
-        VoteProcessor.best_restaurant_by_user_rank(restaurant, np.sum(M_usr_x_rest_rank, axis=1, dtype=np.float_))
+        VoteProcessor.best_restaurant_by_user_vote(restaurant.get_names(),
+                                                   np.sum(M_usr_x_rest, axis=1, dtype=np.float_))
+        VoteProcessor.best_restaurant_by_user_rank(restaurant.get_names(),
+                                                   np.sum(M_usr_x_rest_rank, axis=1, dtype=np.float_))
 
         print(
             'Q. Why is there a difference between the two?  What problem arrives?  What does represent in the real world?')
@@ -156,28 +158,36 @@ class VoteProcessor:
         print('It indicates that ranking votes are relative and does not reflect the popular vote.')
         print('Q. How should you preprocess your data to remove this problem?')
         print(
-            'A. sum of rank ignores the individual vote. Perhaps if I preprocess the data in a way that considers the individual vote, both computations yield the same result.')
+            'A. Sum of rank ignores the weight of individual vote. If I preprocess the data in a way that considers the individual vote, both computations yield the same result.')
+        print('B. If the inverse matrix of rank is multiplied to the result, it will return the weight result')
+        print(
+            'B. , that matrix will have the missing weight of each rank. If we multiply it to rank and calculate the sum, it will return the same order of ranks')
+        print(
+            'B. Following results verify that the preprocess will work and the rank result become identical to the score results.')
+        rank_inverse_matrix_inv = np.linalg.pinv(M_usr_x_rest_rank)
+        weight = np.matmul(results, rank_inverse_matrix_inv)
+        weighted_rank = np.matmul(weight, M_usr_x_rest_rank)
+        VoteProcessor.best_restaurant_by_user_rank(restaurant.get_names(),
+                                                   np.sum(weighted_rank, axis=1, dtype=np.float_))
         return M_usr_x_rest_rank
 
     @classmethod
-    def best_restaurant_by_user_vote(cls, restaurant, data):
-        M_rest_x_usr_rank = np.argsort(np.argsort(data, axis=0), axis=0)[::-1] + 1
+    def best_restaurant_by_user_vote(cls, names, data):
+        M_rest_x_usr_score = np.argsort(np.argsort(data)[::-1]) + 1
         print('The computed sum can help us display the best restaurants in order based on people\'s vote')
-        print('M_rest_x_usr_rank ranks restaurants according to popularity. The best restaurant is ranked as 1')
+        print('M_rest_x_usr_score ranks restaurants according to sum of user vote. The best restaurant is ranked as 1')
         print('------------------------Best Restaurants-------------------------')
-        names = restaurant.get_names()
         print('name', '\t\t\t', 'score', '\t\t\t', 'rank')
         for i in range(0, 10):
-            ith_user_rank = M_rest_x_usr_rank[i]
+            ith_user_rank = M_rest_x_usr_score[i]
             print(names[i], '\t\t\t', data[i], '\t\t', ith_user_rank)
         print('----------------------------------------------------------------------')
 
     @classmethod
-    def best_restaurant_by_user_rank(cls, restaurant, data):
-        M_rest_x_usr_rank = np.argsort(np.argsort(data, axis=0), axis=0)[::-1] + 1
+    def best_restaurant_by_user_rank(cls, names, data):
+        M_rest_x_usr_rank = np.argsort(np.argsort(data)[::-1]) + 1
         print('The ranking according to sum of ranks:')
         print('------------------------Best Restaurants-------------------------')
-        names = restaurant.get_names()
         print('name', '\t\t\t', 'score', '\t\t\t', 'rank')
         for i in range(0, 10):
             ith_user_rank = M_rest_x_usr_rank[i]

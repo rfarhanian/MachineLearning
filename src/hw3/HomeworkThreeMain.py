@@ -20,15 +20,17 @@ class HomeworkThreeMain:
         DataVisualizer.visualize_cluster(restaurant_pca_context.get_reduced(), restaurants.get_names())
         DataVisualizer.plot_elbow(restaurant_pca_context, 'Restaurant PCA Elbow Plot')
         print(
-            'The elbow in the scree plots of both restaurant and people illustrate that the first 2 PCA components explain most of the variance.')
+            'The elbow in the scree plots of both restaurant and people illustrate that the first 2 PCA components explain about 60 percent of the variance.')
         restaurant_pca_context = ClusterProcessor.init_pca(restaurants.get_matrix(), n_components=2)
         people_pca_context = ClusterProcessor.init_pca(people.get_matrix(), n_components=2)
-        ClusterProcessor.kmeans_in_range(restaurant_pca_context.get_reduced(), [2, 3, 4, 5, 6])
+        ClusterProcessor.process(restaurant_pca_context.get_reduced(), [2, 3, 4, 5, 6])
         print(
-            'Calinski Harabaz and Davies Bouldin scores suggest that restaurants can be categorized into 6 clusters. However, silouhette coeffcient suggests clusters of size 2.')
-        ClusterProcessor.kmeans_in_range(people_pca_context.get_reduced(), [2, 3, 4, 5, 6])
+            'Calinski Harabaz and Davies Bouldin scores suggest that restaurants can be categorized into 6 clusters(categories). However, silouhette coeffcient suggests clusters of size 2.')
+        ClusterProcessor.process(people_pca_context.get_reduced(), [2, 3, 4, 5, 6])
         print(
-            'Calinski Harabaz and Davies Bouldin scores again suggest that people should go to restaurants in groups of 6. However, silouhette coeffcient suggests groups of 3.')
+            'Considering that Calinski Harabaz and Davies Bouldin scores suggest that people should go to restaurants in 6 groups, I think 6 is the right answer.')
+
+        DataVisualizer.visualize_silhouette(restaurant_pca_context.get_reduced(), restaurants.get_names())
         # DataVisualizer.visualize_hierarchical_cluster(people_pca_context.get_reduced(), people.get_names())
         # DataVisualizer.visualize_hierarchical_cluster(restaurant_pca_context.get_reduced(), restaurants.get_names())
 

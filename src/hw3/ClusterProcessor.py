@@ -18,7 +18,7 @@ class ClusterProcessor:
         return PcaContext(reduced, pca.explained_variance_ratio_)
 
     @classmethod
-    def kmeans_in_range(cls, pca_reduced, cluster_collection):
+    def process(cls, pca_reduced, cluster_collection):
         result = list()
         print(
             'Evaluating the performance of a clustering algorithm is not as trivial as counting the number of errors ')
