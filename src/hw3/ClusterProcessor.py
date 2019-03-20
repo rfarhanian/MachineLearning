@@ -18,7 +18,7 @@ class ClusterProcessor:
         return PcaContext(reduced, pca.explained_variance_ratio_)
 
     @classmethod
-    def process(cls, pca_reduced, cluster_collection):
+    def process(cls, pca_reduced, cluster_collection, names: list):
         result = list()
         print(
             'Evaluating the performance of a clustering algorithm is not as trivial as counting the number of errors ')
@@ -30,7 +30,7 @@ class ClusterProcessor:
         print(
             'such that members belong to the same class are more similar that members of different classes according to some similarity metric.')
         for cluster_size in cluster_collection:
-            result.extend(cls.__kmeans__(cluster_size, pca_reduced))
+            result.extend(cls.__kmeans__(cluster_size, pca_reduced, names))
         result = sorted(result, key=lambda x: x.method, reverse=True)
         print('-----------------')
         print(
@@ -50,7 +50,7 @@ class ClusterProcessor:
         return result
 
     @classmethod
-    def __kmeans__(cls, cluster_size, pca_reduced):
+    def __kmeans__(cls, cluster_size, pca_reduced, names: list):
         """
             The KMeans algorithm clusters data by trying to separate samples in n groups of equal variance,
             minimizing a criterion known as the inertia or within-cluster sum-of-squares. This algorithm requires
@@ -62,37 +62,37 @@ class ClusterProcessor:
         clusterer = KMeans(n_clusters=cluster_size, random_state=10)
         cluster_labels = clusterer.fit_predict(pca_reduced)
         result = list()
-        result.append(ClusterProcessor.davies_bouldin(cluster_labels, pca_reduced, cluster_size))
-        result.append(ClusterProcessor.variance_ratio_criterion(cluster_labels, pca_reduced, cluster_size))
-        result.append(ClusterProcessor.silhouette_coefficient(cluster_labels, pca_reduced, cluster_size))
+        result.append(ClusterProcessor.davies_bouldin(cluster_labels, pca_reduced, cluster_size, names))
+        result.append(ClusterProcessor.variance_ratio_criterion(cluster_labels, pca_reduced, cluster_size, names))
+        result.append(ClusterProcessor.silhouette_coefficient(cluster_labels, pca_reduced, cluster_size, names))
         return result
 
     @classmethod
-    def silhouette_coefficient(cls, cluster_labels, pca_reduced, cluster_size):
+    def silhouette_coefficient(cls, cluster_labels, pca_reduced, cluster_size, names: list):
         """
              If the ground truth labels are not known, evaluation must be performed using the model itself.
              The Silhouette Coefficient is an example of such an evaluation, where a higher Silhouette Coefficient
              score relates to a model with better defined clusters.
          """
         score = metrics.silhouette_score(pca_reduced, cluster_labels)
-        return ClusterMetricScore('Silhouette score', score, cluster_size)
+        return ClusterMetricScore('Silhouette score', score, cluster_size, cluster_labels, names)
 
     @classmethod
-    def variance_ratio_criterion(cls, cluster_labels, pca_reduced, cluster_size):
+    def variance_ratio_criterion(cls, cluster_labels, pca_reduced, cluster_size, names: list):
         """
         If the ground truth labels are not known, the Calinski-Harabaz index (sklearn.metrics.calinski_harabaz_score) -
         also known as the Variance Ratio Criterion - can be used to evaluate the model, where a higher Calinski-Harabaz
         score relates to a model with better defined clusters.
         """
         score = metrics.calinski_harabaz_score(pca_reduced, cluster_labels)
-        return ClusterMetricScore('calinski harabaz', score, cluster_size)
+        return ClusterMetricScore('calinski harabaz', score, cluster_size, cluster_labels, names)
 
     @classmethod
-    def davies_bouldin(cls, cluster_labels, pca_reduced, cluster_size):
+    def davies_bouldin(cls, cluster_labels, pca_reduced, cluster_size, names: list):
         """
         If the ground truth labels are not known, the Davies-Bouldin index (sklearn.metrics.davies_bouldin_score) can be
         used to evaluate the model, where a lower Davies-Bouldin index relates to a model with better separation
         between the clusters.
         """
         score = metrics.davies_bouldin_score(pca_reduced, cluster_labels)
-        return ClusterMetricScore('davies_bouldin', score, cluster_size)
+        return ClusterMetricScore('davies_bouldin', score, cluster_size, cluster_labels, names)

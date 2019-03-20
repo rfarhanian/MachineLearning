@@ -7,6 +7,15 @@ from hw3.domain.Restaurant import Restaurant
 class VoteProcessor:
 
     @classmethod
+    def process_without_cost_and_distance(cls, restaurant: Restaurant, people: People):
+        '''
+        I just found out the boss is paying for the meal. I don't need to consider cost in the voting process.
+        '''
+        restaurant_matrix_without_cost = np.delete(restaurant.get_matrix(), 2, 1)
+        people_matrix_without_cost = np.delete(people.get_matrix(), 2, 1)
+        cls.process(restaurant, people)
+
+    @classmethod
     def process(cls, restaurant: Restaurant, people: People):
         restaurants_matrix = restaurant.get_matrix()
         people_matrix = people.get_matrix()
@@ -92,7 +101,8 @@ class VoteProcessor:
 
         sum = np.sum(M_usr_x_rest, axis=1, dtype=np.float_)
         print(
-            'sum represents the sum of all the votes of all individuals to all restaurants. This array can be used to rank the restaurants based on popularity')
+            'sum represents the sum of all the votes of all individuals to all restaurants. This array can be used to rank the restaurants based on popularity',
+            sum)
 
         # Now convert each row in the M_usr_x_rest into a ranking for each user and call it M_usr_x_rest_rank.
         # Do the same as above to generate the optimal restaurant choice.
@@ -169,6 +179,12 @@ class VoteProcessor:
         weighted_rank = np.matmul(weight, M_usr_x_rest_rank)
         VoteProcessor.best_restaurant_by_user_rank(restaurant.get_names(),
                                                    np.sum(weighted_rank, axis=1, dtype=np.float_))
+        print('----------------------------------------------------------------------')
+        print('Q. Find user profiles that are problematic, explain why?')
+        print('A. Moe\'s vote to Sushi and Michaels is different than others. Plots verify this observation')
+
+        print('----------------------------------------------------------------------')
+
         return M_usr_x_rest_rank
 
     @classmethod
