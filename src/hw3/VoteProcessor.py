@@ -13,7 +13,15 @@ class VoteProcessor:
         '''
         restaurant_matrix_without_cost = np.delete(restaurant.get_matrix(), 2, 1)
         people_matrix_without_cost = np.delete(people.get_matrix(), 2, 1)
-        cls.process(restaurant, people)
+        votes_without_considering_costs = np.matmul(restaurant_matrix_without_cost, people_matrix_without_cost.T)
+        votes_combined = np.sum(votes_without_considering_costs, axis=1)
+        restaurants_without_considering_costs = list(zip(restaurant.get_names(), votes_combined))
+        sorted_restaurants_without_considering_costs = sorted(restaurants_without_considering_costs, key=lambda x: x[1],
+                                                              reverse=True)
+        print(
+            'Q. Now you just found out the boss is paying for the meal. How should you adjust. Now what is best restaurant?')
+        print('A. If we ignore the cost, ', sorted_restaurants_without_considering_costs[0][0],
+              ' is the best restaurant with score :', sorted_restaurants_without_considering_costs[0][1])
 
     @classmethod
     def process(cls, restaurant: Restaurant, people: People):

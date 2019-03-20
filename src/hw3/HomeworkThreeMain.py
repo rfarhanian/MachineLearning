@@ -41,7 +41,7 @@ class HomeworkThreeMain:
         DataVisualizer.visualize_hierarchical_cluster(people_pca_context.get_reduced(), people.get_names())
         DataVisualizer.visualize_hierarchical_cluster(restaurant_pca_context.get_reduced(), restaurants.get_names())
 
-        # VoteProcessor.process_without_cost_and_distance(restaurants, people)
+        VoteProcessor.process_without_cost_and_distance(restaurants, people)
 
 
 
