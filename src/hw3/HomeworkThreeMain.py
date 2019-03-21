@@ -31,8 +31,11 @@ class HomeworkThreeMain:
             'A. The next two best choices of Calinski Harabaz and Davies Bouldin(5 and 4) will lead to the same problem for Jane.')
         print(
             'A. The best choice that leads to groups larger than one is cluster size equal to 3 (which also gains the best silhouette scores) is  Group 1(Bob, Moe), Group 2(Mary, Mike, John, Kira, Tom), Group 3 (Jane, Alice, Sara)')
+        print('----------------------------------------------------------------------')
+        print('Q. Find user profiles that are problematic, explain why?')
         print(
-            'Jane has a problematic profile as her unique taste partitioned her into a cluster of size 1 several times')
+            'Jane has a problematic profile as her unique taste partitioned her into a cluster of size 1 several times. Also, when we look at the favorite restaurants individually, we can see that Bob\'s favorite restaurant is unique among others.')
+        print('----------------------------------------------------------------------')
 
         DataVisualizer.visualize_silhouette(restaurant_pca_context.get_reduced(), restaurants.get_names(), 'restaurant')
         DataVisualizer.visualize_silhouette(people_pca_context.get_reduced(), people.get_names(), 'people')
@@ -42,7 +45,12 @@ class HomeworkThreeMain:
         DataVisualizer.visualize_hierarchical_cluster(restaurant_pca_context.get_reduced(), restaurants.get_names())
 
         VoteProcessor.process_without_cost_and_distance(restaurants, people)
-
+        print(
+            'Q. Tommorow you visit another team. You have the same restaurants and they told you their optimal ordering for restaurants. Can you find their weight matrix?')
+        print(
+            'A. With the given rankings matrix, if we could find the vote matrix, we could still come to a conclusion about the places to take the other team to lunch,')
+        print('A. If the inverse matrix of rank is multiplied to the vote matrix, it will calculate the weight result.')
+        print('A. but without the vote matrix, it is not possible to calculate the weight matrix.')
 
 
 HomeworkThreeMain.start()

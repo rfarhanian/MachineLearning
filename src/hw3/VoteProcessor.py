@@ -135,6 +135,25 @@ class VoteProcessor:
         M_usr_x_rest_rank = np.argsort(np.argsort(M_usr_x_rest, axis=0)[::-1], axis=0) + 1
         M_usr_x_rest_rank
 
+        print('------------------------People preference ----------------------------')
+        names = people.get_names()
+        transposed_rank = M_usr_x_rest_rank.T
+        for i in range(0, 10):
+            ith_rest_rank = transposed_rank[0:10][i]
+            r = restaurant.get_names()
+            for j in range(0, 10):
+                if ith_rest_rank[j] == 1:
+                    print(names[i], '\'s favorite restaurant is: ', r[j])
+
+        print('----------------------------------------------------------------------')
+
+        print('------------------------Best Restaurants order by sum of scores-----------------------------')
+        best_restaurants = list(zip(restaurant.get_names(), np.sum(M_usr_x_rest, axis=1, dtype=np.float_)))
+        sorted_best_restaurants = sorted(best_restaurants, key=lambda x: x[1], reverse=True)
+        print(sorted_best_restaurants)
+        print('----------------------------------------------------------------------')
+
+
         print('------------------------People with restaurant rank-------------------------')
         names = people.get_names()
         offset = '\t\t\t'
@@ -187,12 +206,6 @@ class VoteProcessor:
         weighted_rank = np.matmul(weight, M_usr_x_rest_rank)
         VoteProcessor.best_restaurant_by_user_rank(restaurant.get_names(),
                                                    np.sum(weighted_rank, axis=1, dtype=np.float_))
-        print('----------------------------------------------------------------------')
-        print('Q. Find user profiles that are problematic, explain why?')
-        print('A. Moe\'s vote to Sushi and Michaels is different than others. Plots verify this observation')
-
-        print('----------------------------------------------------------------------')
-
         return M_usr_x_rest_rank
 
     @classmethod
